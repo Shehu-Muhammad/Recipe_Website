@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1>🍽️ My Recipe Hub</h1>
+        <nav>
+            <button class="tab" data-tab="breakfast">Breakfast</button>
+            <button class="tab" data-tab="lunch">Lunch & Dinner</button>
+            <button class="tab" data-tab="dessert">Desserts & Snacks</button>
+        </nav>
+    </header>
+    <main>
+    <section id="breakfast" class="tab-content active">
+        <!-- Breakfast recipes get rendered here -->
+    </section>
+
+    <section id="lunch" class="tab-content">
+        <!-- Lunch/Dinner recipes get rendered here -->
+    </section>
+
+    <section id="dessert" class="tab-content">
+        <!-- Desserts/Snacks recipes get rendered here -->
+    </section>
+    </main>
+    <template id="recipe-card-template">
+    <div class="recipe-card">
+        <img src="" alt="Recipe Image">
+        <h3 class="recipe-title">Title</h3>
+        <p class="recipe-summary">Short description...</p>
+        <a class="recipe-link" href="#" target="_blank">View Recipe</a>
+    </div>
+    </template>
+</body>
+</html>
