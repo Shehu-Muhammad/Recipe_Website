@@ -9,3 +9,6 @@ document.querySelectorAll('.tab').forEach(button => {
     document.getElementById(tab).classList.add('active');
   });
 });
+
+
+console.log('✅ Script loaded!');
