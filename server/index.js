@@ -11,11 +11,12 @@ const API_URL = 'https://api.spoonacular.com/recipes/complexSearch';
 
 app.get('/api/recipes', async (req, res) => {
   try {
-    const { type } = req.query;
+    const { type, offset = 0 } = req.query;
     const response = await axios.get(API_URL, {
       params: {
         apiKey: process.env.SPOONACULAR_API_KEY,
         number: 9,
+        offset,
         addRecipeInformation: true,
         type
       }

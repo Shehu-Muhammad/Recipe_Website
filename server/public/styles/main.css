@@ -23,12 +23,15 @@ main {
 }
 
 .recipe-card {
-  width: 280px;
   border: 1px solid #eee;
   border-radius: 12px;
   padding: 1rem;
   background: #fff;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  min-height: 360px; /* optional: keep card height consistent */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .tab-content {
@@ -37,7 +40,44 @@ main {
 }
 
 .tab-content.active {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 2rem;
   justify-content: center;
+  margin-bottom: 3rem;
 }
+
+.tab.active {
+  border-bottom: 3px solid black;
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0 3rem; /* extra bottom spacing */
+  gap: 1.5rem;
+  padding-top: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: #f2f2f2;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
