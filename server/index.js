@@ -11,16 +11,21 @@ const API_URL = 'https://api.spoonacular.com/recipes/complexSearch';
 
 app.get('/api/recipes', async (req, res) => {
   try {
-    const { type, offset = 0 } = req.query;
-    const response = await axios.get(API_URL, {
-      params: {
-        apiKey: process.env.SPOONACULAR_API_KEY,
-        number: 9,
-        offset,
-        addRecipeInformation: true,
-        type
-      }
-    });
+    const { type, offset = 0, query = '' } = req.query;
+    const params = {
+      apiKey: process.env.SPOONACULAR_API_KEY,
+      number: 9,
+      offset,
+      type,
+      addRecipeInformation: true,
+    };
+
+    if (query && query.trim() !== '') {
+      params.query = query;
+    }
+
+    const response = await axios.get(API_URL, { params });
+
     res.json(response.data);
   } catch (err) {
     console.error('Error fetching from Spoonacular:', err);
