@@ -15,11 +15,9 @@ nav button {
 }
 
 main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 .recipe-card {
@@ -34,17 +32,55 @@ main {
   justify-content: space-between;
 }
 
-.tab-content {
-  display: none;
+.recipe-card img {
   width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-.tab-content.active {
+.recipe-card:hover {
+  box-shadow: 0 0 15px rgba(0,0,0,0.15);
+  transform: translateY(-3px);
+  transition: box-shadow 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.recipes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2rem;
-  justify-content: center;
-  margin-bottom: 3rem;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.recipe-title {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  min-height: 2.2rem; /* keeps titles aligned even if some wrap */
+}
+
+.recipe-summary {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.tab-content {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tab-content.active {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .tab.active {
@@ -56,15 +92,14 @@ main {
 .pagination {
   display: flex;
   justify-content: center;
-  margin: 2rem 0 3rem; /* extra bottom spacing */
-  gap: 1.5rem;
-  padding-top: 1rem;
+  gap: 1rem;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 .pagination button {
-  padding: 0.5rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
   background-color: #f2f2f2;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -73,11 +108,74 @@ main {
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #e0e0e0;
+  background-color: #ddd;
 }
 
 .pagination button:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
+  cursor: default;
 }
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem auto;
+  margin-bottom: 1rem;
+  max-width: 600px;
+  padding: 0 1rem;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  max-width: 400px;
+}
+
+.search-bar button {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.search-bar button:hover {
+  background-color: #555;
+}
+
+.clear-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  padding: 0 0.5rem;
+  color: #333;
+  transition: opacity 0.2s ease;
+}
+
+.clear-btn:hover {
+  color: #000;
+}
+
+.clear-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.visually-hidden {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 
