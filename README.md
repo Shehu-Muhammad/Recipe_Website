@@ -32,7 +32,7 @@ Follow these steps to set up the project on your local machine:
 
 ```bash
 git clone https://github.com/Shehu-Muhammad/Recipe_Website.git
-cd recipe-hub
+cd Recipe_Website
 ```
 ---
 ### ✅ Step 2: Install Dependencies
@@ -103,7 +103,7 @@ Use "❌ Clear" to reset your search input.
 ### 📁 Project Structure
 
 ```
-recipe-hub/
+Recipe_Website/
 ├── public/
 │   └── index.html
 ├── styles/
