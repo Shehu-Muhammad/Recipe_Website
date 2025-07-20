@@ -16,12 +16,15 @@ A responsive recipe search app that lets users explore breakfast, lunch/dinner, 
 
 ## 📸 Preview
 
-<!-- Replace the path below with your own image or GIF -->
-<!-- Example: ![Preview](./screenshot.png) -->
-<!-- Example hosted preview: ![Live Demo](https://yourdomain.com/preview.gif) -->
+### 🍳 Breakfast Recipes Preview  
 ![Breakfast Demo](./assets/Breakfast.gif)
+
+### 🍽️ Lunch & Dinner Recipes Preview  
 ![Lunch & Dinner Demo](./assets/Lunch_Dinner.gif)
+
+### 🍪 Snacks & Desserts Recipes Preview  
 ![Desserts & Snacks Demo](./assets/Snacks_Desserts.gif)
+
 ---
 
 ## 🚀 Getting Started
