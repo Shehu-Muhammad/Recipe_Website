@@ -19,7 +19,9 @@ A responsive recipe search app that lets users explore breakfast, lunch/dinner, 
 <!-- Replace the path below with your own image or GIF -->
 <!-- Example: ![Preview](./screenshot.png) -->
 <!-- Example hosted preview: ![Live Demo](https://yourdomain.com/preview.gif) -->
-![Live Demo](./server/public/assets/Recipe_Hub_MVP.mp4)
+![Breakfast Demo](./assets/Breakfast.gif)
+![Lunch & Dinner Demo](./assets/Lunch_Dinner.gif)
+![Desserts & Snacks Demo](./assets/Snacks_Desserts.gif)
 ---
 
 ## 🚀 Getting Started
