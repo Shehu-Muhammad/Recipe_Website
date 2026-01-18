@@ -5,30 +5,29 @@ require('dotenv').config();
 const cors = require('cors');
 
 const app = express();
+
+// ⚠️ CORS not needed on Vercel, but safe for local dev
 app.use(cors());
 
-const PORT = 5000;
+// ⏱️ Cache (works locally, best-effort on Vercel)
+const cache = new NodeCache({ stdTTL: 86400 });
+
 const API_URL = 'https://api.spoonacular.com/recipes/complexSearch';
 
-// ⏱️ Cache with 24-hour TTL (in seconds)
-const cache = new NodeCache({ stdTTL: 86400 }); // 86400 = 24h
-
+// Serve frontend
 app.use(express.static('public'));
 
 app.get('/api/recipes', async (req, res) => {
   const { type, offset = 0, query = '' } = req.query;
 
-  // Generate a cache key based on parameters
-  const cacheKey = `recipes:${query || ''}:${type || ''}:${offset || 0}`;
+  const cacheKey = `recipes:${query}:${type}:${offset}`;
 
-  // ✅ If cached, return cached response
   const cachedData = cache.get(cacheKey);
   if (cachedData) {
-    console.log('Returning cached data');
+    console.log('🧠 Returning cached data');
     return res.json(cachedData);
   }
 
-  // ❌ Not cached: Fetch from API
   try {
     const params = {
       apiKey: process.env.SPOONACULAR_API_KEY,
@@ -38,35 +37,37 @@ app.get('/api/recipes', async (req, res) => {
       addRecipeInformation: true,
     };
 
-    if (query && query.trim() !== '') {
-      params.query = query;
-    }
+    if (query.trim()) params.query = query;
 
     const response = await axios.get(API_URL, { params });
     const data = response.data;
 
-    // 🧠 Cache the data for future requests
     cache.set(cacheKey, data);
-    console.log('🌐 Fetched and cached new data');
+    console.log('🌐 Fetched & cached new data');
 
     res.json(data);
   } catch (err) {
-    console.error('❌ Error fetching from Spoonacular:', err.message);
+    console.error('❌ Spoonacular error:', err.message);
     res.status(500).json({ error: 'Failed to fetch recipes' });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
-
-// http://localhost:5000/api/clear-cache
-
+// 🧹 Dev-only cache clear
 app.get('/api/clear-cache', (req, res) => {
   if (process.env.NODE_ENV === 'production') {
-    return res.status(403).send('⛔ Not allowed in production.');
+    return res.status(403).send('⛔ Not allowed in production');
   }
   cache.flushAll();
-  res.send('🧹 Cache cleared!');
+  res.send('🧹 Cache cleared');
 });
 
+// ✅ ONLY listen locally
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Local server running at http://localhost:${PORT}`);
+  });
+}
+
+// ✅ REQUIRED for Vercel
+module.exports = app;
