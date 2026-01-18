@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://recipe-website-git-main-shehus-projects-5f5aacdd.vercel.app/sitemap.xml
