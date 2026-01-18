@@ -54,7 +54,7 @@ app.get('/api/recipes', async (req, res) => {
 
 // 🧹 Dev-only cache clear
 app.get('/api/clear-cache', (req, res) => {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     return res.status(403).send('⛔ Not allowed in production');
   }
   cache.flushAll();

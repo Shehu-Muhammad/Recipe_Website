@@ -4,6 +4,13 @@ import NodeCache from 'node-cache';
 const cache = new NodeCache({ stdTTL: 86400 }); // 24h
 
 export default async function handler(req, res) {
+  return res.json({
+    ok: true,
+    hasKey: !!process.env.SPOONACULAR_API_KEY
+  });
+}
+
+export default async function handler(req, res) {
   const { type, offset = 0, query = '' } = req.query;
   const cacheKey = `recipes:${query}:${type}:${offset}`;
 
