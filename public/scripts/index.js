@@ -1,6 +1,6 @@
-const serverBase = 'http://localhost:5000';
 const pageSize = 9;
 
+// State tracking
 const pageState = {
   breakfast: 0,
   lunch: 0,
@@ -19,7 +19,7 @@ const apiMealTypeMap = {
   dessert: 'dessert'
 };
 
-// Tab switching logic
+// ------------------- TAB SWITCHING -------------------
 document.querySelectorAll('.tab').forEach(button => {
   button.addEventListener('click', () => {
     const tab = button.dataset.tab;
@@ -33,23 +33,24 @@ document.querySelectorAll('.tab').forEach(button => {
     button.classList.add('active');
     button.setAttribute('aria-selected', 'true');
     button.setAttribute('tabindex', '0');
-    
-    // Show/hide tab contents as before...
+
+    // Show/hide tab contents
     document.querySelectorAll('.tab-content').forEach(section => {
       section.classList.remove('active');
     });
     document.getElementById(tab).classList.add('active');
 
-    // Optional: move focus to the active tab for keyboard users
     button.focus();
   });
 });
 
-// Fetch recipes from server
+// ------------------- FETCH RECIPES -------------------
 async function fetchRecipes(mealType, containerId, page = 0) {
   const query = searchState[mealType];
   const apiType = apiMealTypeMap[mealType];
-  const url = `${serverBase}/api/recipes?type=${apiType}&offset=${page * pageSize}${query ? `&query=${query}` : ''}`;
+
+  // ✅ Use relative URL — works locally + on Vercel
+  const url = `/api/recipes?type=${apiType}&offset=${page * pageSize}${query ? `&query=${encodeURIComponent(query)}` : ''}`;
 
   try {
     const res = await fetch(url);
@@ -62,13 +63,14 @@ async function fetchRecipes(mealType, containerId, page = 0) {
   }
 }
 
-// Render recipe cards + pagination
+// ------------------- RENDER RECIPES + PAGINATION -------------------
 function renderRecipes(recipes, containerId, mealType, totalResults) {
   const recipesContainer = document.getElementById(`${containerId}-recipes`);
   const paginationContainer = document.getElementById(`${containerId}-pagination`);
   recipesContainer.innerHTML = '';
   paginationContainer.innerHTML = '';
 
+  // Render recipe cards
   recipes.forEach(recipe => {
     const template = document.getElementById('recipe-card-template').content.cloneNode(true);
     template.querySelector('img').src = recipe.image;
@@ -79,7 +81,7 @@ function renderRecipes(recipes, containerId, mealType, totalResults) {
     recipesContainer.appendChild(template);
   });
 
-  // Pagination buttons
+  // ------------------- PAGINATION -------------------
   const prev = document.createElement('button');
   prev.textContent = '⟵ Prev';
   prev.disabled = pageState[mealType] === 0;
@@ -94,8 +96,6 @@ function renderRecipes(recipes, containerId, mealType, totalResults) {
 
   const next = document.createElement('button');
   next.textContent = 'Next ⟶';
-
-  // Calculate max page (0-indexed)
   const maxPage = Math.floor((totalResults - 1) / pageSize);
   next.disabled = pageState[mealType] >= maxPage;
   next.setAttribute('aria-disabled', next.disabled ? 'true' : 'false');
@@ -111,12 +111,11 @@ function renderRecipes(recipes, containerId, mealType, totalResults) {
   paginationContainer.appendChild(next);
 }
 
-// Search button handler (globally scoped!)
+// ------------------- SEARCH HANDLERS -------------------
 function handleSearch(mealType) {
   const input = document.getElementById(`${mealType}-search`);
-  const query = input.value.trim();
-  searchState[mealType] = query;
-  pageState[mealType] = 0; // reset to first page
+  searchState[mealType] = input.value.trim();
+  pageState[mealType] = 0;
   fetchRecipes(mealType, mealType, 0);
 }
 
@@ -129,44 +128,42 @@ function clearSearch(mealType) {
   pageState[mealType] = 0;
   fetchRecipes(mealType, mealType, 0);
 
-  // Disable and style the clear button since input is now empty
   clearBtn.disabled = true;
   clearBtn.style.opacity = '0.5';
   clearBtn.style.cursor = 'default';
 }
 
-
-// Initial load
+// ------------------- INITIALIZATION -------------------
 document.addEventListener('DOMContentLoaded', () => {
-['breakfast', 'lunch', 'dessert'].forEach(meal => {
-  const input = document.getElementById(`${meal}-search`);
-  const clearBtn = document.getElementById(`${meal}-clear`);
+  ['breakfast', 'lunch', 'dessert'].forEach(meal => {
+    const input = document.getElementById(`${meal}-search`);
+    const clearBtn = document.getElementById(`${meal}-clear`);
 
-  input.addEventListener('input', () => {
-    if (input.value.trim().length > 0) {
-      clearBtn.disabled = false;
-      clearBtn.style.opacity = '1';
-      clearBtn.style.cursor = 'pointer';
-    } else {
-      clearBtn.disabled = true;
-      clearBtn.style.opacity = '0.5';
-      clearBtn.style.cursor = 'default';
-    }
+    input.addEventListener('input', () => {
+      if (input.value.trim().length > 0) {
+        clearBtn.disabled = false;
+        clearBtn.style.opacity = '1';
+        clearBtn.style.cursor = 'pointer';
+      } else {
+        clearBtn.disabled = true;
+        clearBtn.style.opacity = '0.5';
+        clearBtn.style.cursor = 'default';
+      }
+    });
   });
-});
 
-  // Set breakfast tab active (in case HTML doesn't already)
+  // Default active tab: breakfast
   document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
   const breakfastTab = document.querySelector('.tab[data-tab="breakfast"]');
   breakfastTab.classList.add('active');
   breakfastTab.setAttribute('aria-selected', 'true');
   breakfastTab.setAttribute('tabindex', '0');
 
-  // Show breakfast content, hide others
+  // Show breakfast content
   document.querySelectorAll('.tab-content').forEach(section => section.classList.remove('active'));
   document.getElementById('breakfast').classList.add('active');
 
-  // Fetch recipes on page load
+  // Fetch initial recipes
   fetchRecipes('breakfast', 'breakfast');
   fetchRecipes('lunch', 'lunch');
   fetchRecipes('dessert', 'dessert');
